@@ -16,7 +16,7 @@
 .footer {
     text-align: center;
     padding: 30px 0;
-    margin-top: 70px;
+    margin-top: 0px;
     border-top: 1px solid #E5E5E5;
     background: black;
     color: white;
@@ -27,8 +27,9 @@
 }
 
 .result-section {
-    background: url("/assets/images/city.jpg")  no-repeat center;
-    margin: 0px;
+    background: url("/assets/images/city.jpg")  no-repeat center top;
+    margin-top: -20px;
+    min-height: 500px;
 }
 
 .result-container {
@@ -36,7 +37,17 @@
 }
 
 .custom-search-form {
-    padding: 300px 0px 300px 0px;
+   padding: 300px 0px 300px 0px;
+   margin-bottom: 10px;
+}
+
+.form-control {
+    height: 50px;
+    font-size: 20px;
+}
+
+.search-btn {
+    height: 50px;
 }
 
 .places {
@@ -100,5 +111,5 @@ button:hover
     padding:5px;
     margin-left: 20px;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 14px;
 }

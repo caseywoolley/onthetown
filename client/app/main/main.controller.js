@@ -1,31 +1,58 @@
 'use strict';
 
 angular.module('workspaceApp')
-  .controller('MainCtrl', function ($scope, $http, Auth) {
-    $scope.awesomeThings = [];
+  .controller('MainCtrl', function ($scope, $http, $location, Auth, $cookieStore, Search) {
     
+    $scope.setResults = Search.setResults;
+    $scope.getResults = Search.getResults;
     $scope.isLoggedIn = Auth.isLoggedIn;
     $scope.user = Auth.getCurrentUser();
-    $scope.businesses = [];
-    $scope.picks = {};
-    $scope.loc = "Visalia"; //make empty
-    $scope.businessIds = [];
-   
+    
+    $scope.businesses = $scope.getResults().businesses;
+    $scope.picks = $scope.getResults().picks;
+    $scope.searching = false;
+    
+    
+    //restore last search term
+    if ($cookieStore.get('search')) {
+      $scope.loc = $cookieStore.get('search');
+    } else {
+      $scope.loc = '';
+    }
+    
+    //set search bar appearance
+    $(".custom-search-form").css({ 
+            'padding-top' : $scope.getResults().searchPadding,
+            'padding-right' : 0,
+            'padding-bottom' : $scope.getResults().searchPadding,
+            'padding-left' : 0,
+    });
+
     $scope.search = function() {
-      $scope.businesses = [];
-      $http.get('/api/yelp/entertainment/' + $scope.loc).success(function(data) {
-        data.businesses.forEach(function(b){
-          $scope.businessIds.push(b.id);
-          $scope.businesses.push(b);
+      if ($scope.searching === false) {
+        $scope.searching = true;
+        $scope.businesses = [];
+        $scope.businessIds = [];
+        $http.get('/api/yelp/entertainment/' + $scope.loc).success(function(data) {
+          data.businesses.forEach(function(b){
+            $scope.businesses.push(b);
+          });
+          $scope.getPicks();
+          $(".custom-search-form").animate({ 
+            'padding-top' : 0,
+            'padding-right' : 0,
+            'padding-bottom' : 0,
+            'padding-left' : 0,
+          }, "slow");
+          $scope.searching = false;
+        }).error(function(){
+          $scope.searching = false;
         });
-        $scope.getPicks();
-        $(".custom-search-form").animate({ 
-          'padding-top' : 0,
-          'padding-right' : 0,
-          'padding-bottom' : 0,
-          'padding-left' : 0,
-        }, "slow");
-      });
+      }
+      //store search term in cookies
+      if ($scope.loc) {
+        $cookieStore.put('search', $scope.loc);
+      }
     }
     
     $scope.getPicks = function() {
@@ -33,6 +60,12 @@ angular.module('workspaceApp')
         picks.forEach(function(pick){
           $scope.picks[pick.yelpId] = pick;
         });
+        
+        $scope.setResults({
+            businesses: $scope.businesses,
+            picks: $scope.picks,
+            searchPadding: 0
+          });
       });
     }
     
@@ -60,11 +93,11 @@ angular.module('workspaceApp')
         $scope.createPick(yelpId);
       }
     } else {
-      //TODO: route to login
+      //re-route to login
+      $location.path('/login');
     }
   };
-    
-    
+
     //create new pick object
     $scope.createPick = function(yelpId){
       $scope.picks[yelpId] = { yelpId: yelpId, userIds: [$scope.user._id], pickCount: 1 };
@@ -90,6 +123,6 @@ angular.module('workspaceApp')
       return $http.delete('/api/picks/' + pick._id);
     };
     
-     //$scope.search(); //temporary
+    
     
   });
