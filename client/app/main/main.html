@@ -1,28 +1,50 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
-</header>
-
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}</a></li>
-      </ul>
+<div class ="result-section">
+  <div class="container result-container">
+    
+    <div class="row">
+  		<div class="col-lg-8 col-lg-offset-2">
+  		  <form name="myForm">
+              <div class="input-group custom-search-form">
+                <input type="text" class="form-control" placeholder="Where are you?" ng-model="loc">
+                <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="search()">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+               </span>
+              </div><!-- /input-group -->
+            </form>
+          </div>
+  	</div>
+  	
+  
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2" >
+        <ul class="places" ng-repeat="business in businesses">
+          <li>
+            <!-- <img ng-src="{{business.image_url}}" class="place-image"/> -->
+            <!-- <img ng-src="{{business.rating_img_url_large}}" class="place-image"/> -->
+            <a class="bus-link" href="{{business.url}}">{{business.name}}</a>
+            <span class="pick-count" ng-show="picks[business.id].pickCount">{{ picks[business.id].pickCount + " Going"}}</span>
+            <!-- <span>{{business.display_address[0]}}</span><span>{{business.display_phone}}</span> -->
+            <button class="btn btn-default add-me" type="button" ng-click="togglePick(business.id)">
+              {{ picks[business.id] ? ( picks[business.id].userIds.indexOf(user._id) !== -1 ? "Remove Me" : "Add Me") : "Add Me" }}
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
 
 <footer class="footer">
   <div class="container">
-      <p>Angular Fullstack v2.1.1 |
-        <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
-         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
+      <p>ON THE TOWN  |  a FreeCodeCamp project by <a href="http://www.freecodecamp.com/caseywoolley">Casey Woolley</a></p>
   </div>
 </footer>
+
+<!--<pre>picks = {{picks | json}}</pre> -->
+
+<!-- <img ng-src="{{business.image_url}}" class="place-image"/> -->
+
