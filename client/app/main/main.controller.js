@@ -72,8 +72,8 @@ angular.module('workspaceApp')
     //toggle pick
     $scope.togglePick = function(yelpId) {
       if ($scope.isLoggedIn()){
-         if ($scope.busy === false) {
-            $scope.busy = true;
+         //if ($scope.busy === false) {
+           // $scope.busy = true;
           // See if pick already exists
           if ($scope.picks[yelpId]){
             // see if user pick already exists
@@ -94,7 +94,7 @@ angular.module('workspaceApp')
           //create new pick object
           $scope.createPick(yelpId);
         }
-      } //if busy
+     // } //if busy
     } else {
       //re-route to login
       $location.path('/login');
