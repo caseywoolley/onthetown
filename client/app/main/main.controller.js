@@ -10,7 +10,7 @@ angular.module('workspaceApp')
     
     $scope.businesses = $scope.getResults().businesses;
     $scope.picks = $scope.getResults().picks;
-    $scope.searching = false;
+    $scope.busy = false;
     
     
     //restore last search term
@@ -29,8 +29,8 @@ angular.module('workspaceApp')
     });
 
     $scope.search = function() {
-      if ($scope.searching === false) {
-        $scope.searching = true;
+      if ($scope.busy === false) {
+        $scope.busy = true;
         $scope.businesses = [];
         $scope.businessIds = [];
         $http.get('/api/yelp/entertainment/' + $scope.loc).success(function(data) {
@@ -44,9 +44,9 @@ angular.module('workspaceApp')
             'padding-bottom' : 0,
             'padding-left' : 0,
           }, "slow");
-          $scope.searching = false;
+          $scope.busy = false;
         }).error(function(){
-          $scope.searching = false;
+          $scope.busy = false;
         });
       }
       //store search term in cookies
@@ -72,26 +72,29 @@ angular.module('workspaceApp')
     //toggle pick
     $scope.togglePick = function(yelpId) {
       if ($scope.isLoggedIn()){
-        // See if pick already exists
-        if ($scope.picks[yelpId]){
-          // see if user pick already exists
-          if ($scope.picks[yelpId].userIds.indexOf($scope.user._id) === -1) {
-            //add user pick
-            $scope.picks[yelpId].userIds.push($scope.user._id);
-            $scope.picks[yelpId].pickCount += 1;
-            $scope.updatePick($scope.picks[yelpId]);
-          } else {
-            //remove user pick
-            var index = $scope.picks[yelpId].userIds.indexOf($scope.user._id);
-            $scope.picks[yelpId].userIds.splice(index, 1);
-            $scope.picks[yelpId].pickCount -= 1;
-            //update picks
-            $scope.updatePick($scope.picks[yelpId])
-          }
-      } else {
-        //create new pick object
-        $scope.createPick(yelpId);
-      }
+         if ($scope.busy === false) {
+            $scope.busy = true;
+          // See if pick already exists
+          if ($scope.picks[yelpId]){
+            // see if user pick already exists
+            if ($scope.picks[yelpId].userIds.indexOf($scope.user._id) === -1) {
+              //add user pick
+              $scope.picks[yelpId].userIds.push($scope.user._id);
+              $scope.picks[yelpId].pickCount += 1;
+              $scope.updatePick($scope.picks[yelpId]);
+            } else {
+              //remove user pick
+              var index = $scope.picks[yelpId].userIds.indexOf($scope.user._id);
+              $scope.picks[yelpId].userIds.splice(index, 1);
+              $scope.picks[yelpId].pickCount -= 1;
+              //update picks
+              $scope.updatePick($scope.picks[yelpId])
+            }
+        } else {
+          //create new pick object
+          $scope.createPick(yelpId);
+        }
+      } //if busy
     } else {
       //re-route to login
       $location.path('/login');
@@ -104,7 +107,8 @@ angular.module('workspaceApp')
       $http.post('/api/picks/', $scope.picks[yelpId])
       .success(function(newPick){
         $scope.picks[yelpId] = newPick;
-      });
+        $scope.busy = false;
+      }).error(function(){ $scope.busy = false });
     };
     
     $scope.updatePick = function(pick) {
@@ -114,13 +118,18 @@ angular.module('workspaceApp')
           //remove empty pick objects
           if (updatedPick.userIds.length === 0) {
             $scope.deletePick(updatedPick);
+          } else {
+            $scope.busy = false;
           }
-        });
+          
+        }).error(function(){ $scope.busy = false });
     };
     
     $scope.deletePick = function(pick) {
       delete $scope.picks[pick.yelpId];
-      return $http.delete('/api/picks/' + pick._id);
+      return $http.delete('/api/picks/' + pick._id)
+      .success(function(){ $scope.busy = false })
+      .error(function(){ $scope.busy = false });
     };
     
     

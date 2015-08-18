@@ -18,8 +18,8 @@
     padding: 30px 0;
     margin-top: 0px;
     border-top: 1px solid #E5E5E5;
-    background: black;
-    color: white;
+    background: #2E2E2E;
+    color: #D1D1D1;
 }
 
 .navbar-text {
@@ -51,7 +51,7 @@
 }
 
 .places {
-    background: rgb(51, 102, 204);
+    background: #09B1F1; /*#55D0FF;*/
     text-decoration: none;
     font-size: 20px;
     padding: 15px;
@@ -60,13 +60,18 @@
     margin: 0px;
     
     border-style: solid;
-    border-width: 1px 2px 1px 2px;
-    border-color: rgb(61, 112, 214);
+    border-width: 1px 0px 1px 0px;
+    border-color: #2CC4FE;
     
 }
 
-.bus-link {
+.places:hover {
+    background: #2CC4FE;
+}
+
+.bus-link, .bus-link:hover, .bus-link:visited, .bus-link:active, .bus-link:link, .bus-link:focus {
     color: white;
+    text-decoration: none;
 }
 
 ul {
@@ -80,12 +85,11 @@ li a {
     padding:5px;
     border-radius: 5px;
 }
-*/
 
 li a:hover {
     text-decoration: none;
-    color: grey;
 }
+
 
 textarea:hover, 
 input:hover, 
@@ -100,6 +104,7 @@ button:hover
     outline:0px !important;
     -webkit-appearance:none;
 }
+*/
 
 .add-me {
     float: right;
@@ -107,7 +112,8 @@ button:hover
 }
 
 .pick-count {
-    background-color:aqua;
+    background-color: #7EDBFF;
+    color: #09B1F1;
     padding:5px;
     margin-left: 20px;
     border-radius: 5px;

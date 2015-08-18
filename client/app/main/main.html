@@ -25,7 +25,7 @@
           <li>
             <!-- <img ng-src="{{business.image_url}}" class="place-image"/> -->
             <!-- <img ng-src="{{business.rating_img_url_large}}" class="place-image"/> -->
-            <a class="bus-link" href="{{business.url}}">{{business.name}}</a>
+            <a class="bus-link" target="_blank" href="{{business.url}}">{{business.name}}</a>
             <span class="pick-count" ng-show="picks[business.id].pickCount">{{ picks[business.id].pickCount + " Going"}}</span>
             <!-- <span>{{business.display_address[0]}}</span><span>{{business.display_phone}}</span> -->
             <button class="btn btn-default add-me" type="button" ng-click="togglePick(business.id)">
