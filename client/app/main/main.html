@@ -13,7 +13,7 @@
                   <span class="glyphicon glyphicon-search"></span>
                 </button>
                </span>
-              </div><!-- /input-group -->
+              </div>
             </form>
           </div>
   	</div>
@@ -23,11 +23,8 @@
       <div class="col-lg-8 col-lg-offset-2" >
         <ul class="places" ng-repeat="business in businesses">
           <li>
-            <!-- <img ng-src="{{business.image_url}}" class="place-image"/> -->
-            <!-- <img ng-src="{{business.rating_img_url_large}}" class="place-image"/> -->
             <a class="bus-link" target="_blank" href="{{business.url}}">{{business.name}}</a>
             <span class="pick-count" ng-show="picks[business.id].pickCount">{{ picks[business.id].pickCount + " Going"}}</span>
-            <!-- <span>{{business.display_address[0]}}</span><span>{{business.display_phone}}</span> -->
             <button class="btn btn-default add-me" type="button" ng-click="togglePick(business.id)">
               {{ picks[business.id] ? ( picks[business.id].userIds.indexOf(user._id) !== -1 ? "Remove Me" : "Add Me") : "Add Me" }}
             </button>
@@ -45,6 +42,4 @@
 </footer>
 
 <!--<pre>picks = {{picks | json}}</pre> -->
-
-<!-- <img ng-src="{{business.image_url}}" class="place-image"/> -->
 

@@ -131,7 +131,5 @@ angular.module('workspaceApp')
       .success(function(){ $scope.busy = false })
       .error(function(){ $scope.busy = false });
     };
-    
-    
-    
+
   });
